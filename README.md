@@ -1,4 +1,4 @@
-# Criminal-Alert-App <br>
+# Crime-Alert-App <br>
 I've created a Criminal Alert App for you with HTML, CSS, and JavaScript. The app has been credited to Kanishk as requested. <br>
 Here's what the app includes:<br>
 **Features:** <br>

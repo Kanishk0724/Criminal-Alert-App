@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criminal Alert App - by Kanishk</title>
+    <style>
+        :root {
+            --primary-color: #c62828;
+            --secondary-color: #f44336;
+            --light-color: #ffcdd2;
+            --dark-color: #7f0000;
+            --text-color: #333;
+            --light-text: #fff;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 1.8rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .credit {
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: var(--light-color);
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            font-weight: bold;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #ffebee;
+        }
+        
+        .content {
+            display: none;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: var(--dark-color);
+        }
+        
+        .alert-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .alert-type {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .alert-time {
+            color: #777;
+            font-size: 0.8rem;
+        }
+        
+        .alert-description {
+            margin-top: 0.8rem;
+        }
+        
+        .alert-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 0.5rem;
+        }
+        
+        .filter-container {
+            background-color: white;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-item {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            margin-left: auto;
+            margin-top: 1rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 0.5rem 0;
+        }
+        
+        .no-alerts {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .map-container {
+            height: 300px;
+            background-color: #e0e0e0;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs button {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .filter-item {
+                min-width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            <span>Criminal Alert App</span>
+        </div>
+        <div class="credit">Developed by Kanishk</div>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" data-tab="report">Report Incident</button>
+            <button class="tab" data-tab="alerts">View Alerts</button>
+            <button class="tab" data-tab="stats">Statistics</button>
+        </div>
+        
+        <div id="report" class="content active">
+            <h2>Report a Criminal Incident</h2>
+            <p>Use this form to report any suspicious or criminal activity in your area.</p>
+            
+            <form id="report-form">
+                <div class="form-group">
+                    <label for="incident-type">Incident Type:</label>
+                    <select id="incident-type" required>
+                        <option value="">-- Select Incident Type --</option>
+                        <option value="theft">Theft</option>
+                        <option value="burglary">Burglary</option>
+                        <option value="assault">Assault</option>
+                        <option value="vandalism">Vandalism</option>
+                        <option value="suspicious">Suspicious Activity</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" placeholder="Enter address or nearby landmark" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date-time">Date & Time:</label>
+                    <input type="datetime-local" id="date-time" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" placeholder="Please provide a detailed description of the incident" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reporter-name">Your Name (Optional):</label>
+                    <input type="text" id="reporter-name" placeholder="Enter your name (optional)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact">Contact Information (Optional):</label>
+                    <input type="text" id="contact" placeholder="Phone number or email (optional)">
+                </div>
+                
+                <button type="submit">Submit Report</button>
+            </form>
+        </div>
+        
+        <div id="alerts" class="content">
+            <h2>Recent Alerts</h2>
+            
+            <div class="filter-container">
+                <h3>Filter Alerts</h3>
+                <div class="filter-row">
+                    <div class="filter-item">
+                        <label for="filter-type">Incident Type:</label>
+                        <select id="filter-type">
+                            <option value="">All Types</option>
+                            <option value="theft">Theft</option>
+                            <option value="burglary">Burglary</option>
+                            <option value="assault">Assault</option>
+                            <option value="vandalism">Vandalism</option>
+                            <option value="suspicious">Suspicious Activity</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="filter-location">Location:</label>
+                        <input type="text" id="filter-location" placeholder="Search by location">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="filter-date">Date:</label>
+                        <input type="date" id="filter-date">
+                    </div>
+                </div>
+                
+                <button class="search-btn" id="apply-filters">Apply Filters</button>
+            </div>
+            
+            <div class="map-container">
+                <p><i class="fas fa-map-marker-alt"></i> Map View (Location data visualization)</p>
+            </div>
+            
+            <div id="alerts-container">
+                <!-- Alerts will be populated here -->
+            </div>
+        </div>
+        
+        <div id="stats" class="content">
+            <h2>Crime Statistics</h2>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Reports</h3>
+                    <div class="stat-value" id="total-reports">0</div>
+                    <p>All time</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>This Week</h3>
+                    <div class="stat-value" id="week-reports">0</div>
+                    <p>Last 7 days</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Most Common</h3>
+                    <div class="stat-value" id="common-type">N/A</div>
+                    <p>Incident type</p>
+                </div>
+            </div>
+            
+            <div class="alert-card">
+                <h3>Crime Trends</h3>
+                <p>Statistical analysis and trends will be displayed here based on reported incidents.</p>
+                <p>This feature helps community members and law enforcement to identify patterns and allocate resources effectively.</p>
+            </div>
+            
+            <div class="alert-card">
+                <h3>Safety Tips</h3>
+                <ul>
+                    <li>Always be aware of your surroundings</li>
+                    <li>Keep valuables out of sight</li>
+                    <li>Report suspicious activity immediately</li>
+                    <li>Ensure doors and windows are locked</li>
+                    <li>Travel in groups when possible, especially at night</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Instead of localStorage, use in-memory storage
+        // Sample data for demonstration
+        let reports = [
+            {
+                id: 1714924800000,
+                type: "theft",
+                location: "Central Park, Main Street",
+                dateTime: "2025-05-03T10:30",
+                description: "Smartphone stolen from cafe table while owner was distracted.",
+                reporter: "Anonymous",
+                contact: "Not provided",
+                timestamp: "2025-05-03T10:30:00Z"
+            },
+            {
+                id: 1714838400000,
+                type: "suspicious",
+                location: "Riverside Avenue, near the bridge",
+                dateTime: "2025-05-02T22:15",
+                description: "Individual looking into parked cars with flashlight. Wearing dark hoodie and jeans.",
+                reporter: "John Doe",
+                contact: "555-0123",
+                timestamp: "2025-05-02T22:15:00Z"
+            },
+            {
+                id: 1714752000000,
+                type: "vandalism",
+                location: "Community Center, 123 Oak Street",
+                dateTime: "2025-05-01T18:45",
+                description: "Graffiti found on the east wall of the community center. Tags appear to be gang-related.",
+                reporter: "Community Watch",
+                contact: "community@watch.org",
+                timestamp: "2025-05-01T18:45:00Z"
+            }
+        ];
+        
+        // Set current date and time as default for the report form
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            const dateTimeLocal = `${year}-${month}-${day}T${hours}:${minutes}`;
+            document.getElementById('date-time').value = dateTimeLocal;
+            
+            // Initialize the app
+            updateAlerts();
+            updateStats();
+        });
+        
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                document.querySelector('.tab.active').classList.remove('active');
+                tab.classList.add('active');
+                
+                // Update active content
+                document.querySelector('.content.active').classList.remove('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Report form submission
+        const reportForm = document.getElementById('report-form');
+        reportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newReport = {
+                id: Date.now(), // Unique ID based on timestamp
+                type: document.getElementById('incident-type').value,
+                location: document.getElementById('location').value,
+                dateTime: document.getElementById('date-time').value,
+                description: document.getElementById('description').value,
+                reporter: document.getElementById('reporter-name').value || 'Anonymous',
+                contact: document.getElementById('contact').value || 'Not provided',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add report to the in-memory array
+            reports.unshift(newReport); // Add to the beginning of the array
+            
+            // Reset form
+            reportForm.reset();
+            
+            // Set current date and time again
+            const now = new Date();
+            const dateTimeLocal = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            document.getElementById('date-time').value = dateTimeLocal;
+            
+            // Show success message
+            alert('Report submitted successfully!');
+            
+            // Update alerts and stats
+            updateAlerts();
+            updateStats();
+            
+            // Switch to alerts tab
+            document.querySelector('[data-tab="alerts"]').click();
+        });
+        
+        // Filter functionality
+        document.getElementById('apply-filters').addEventListener('click', function() {
+            updateAlerts();
+        });
+        
+        // Update alerts based on filters
+        function updateAlerts() {
+            const alertsContainer = document.getElementById('alerts-container');
+            const filterType = document.getElementById('filter-type').value;
+            const filterLocation = document.getElementById('filter-location').value.toLowerCase();
+            const filterDate = document.getElementById('filter-date').value;
+            
+            // Filter reports
+            let filteredReports = [...reports];
+            
+            if (filterType) {
+                filteredReports = filteredReports.filter(report => report.type === filterType);
+            }
+            
+            if (filterLocation) {
+                filteredReports = filteredReports.filter(report => 
+                    report.location.toLowerCase().includes(filterLocation)
+                );
+            }
+            
+            if (filterDate) {
+                filteredReports = filteredReports.filter(report => 
+                    report.dateTime.startsWith(filterDate)
+                );
+            }
+            
+            // Clear container
+            alertsContainer.innerHTML = '';
+            
+            if (filteredReports.length === 0) {
+                alertsContainer.innerHTML = `
+                    <div class="no-alerts">
+                        <i class="fas fa-search" style="font-size: 3rem; color: #ccc;"></i>
+                        <h3>No alerts found</h3>
+                        <p>No incidents match your search criteria or none have been reported yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Create alert cards
+            filteredReports.forEach(report => {
+                const reportDate = new Date(report.dateTime);
+                const formattedDate = reportDate.toLocaleString();
+                
+                const typeLabels = {
+                    'theft': 'Theft',
+                    'burglary': 'Burglary',
+                    'assault': 'Assault',
+                    'vandalism': 'Vandalism',
+                    'suspicious': 'Suspicious Activity',
+                    'other': 'Other'
+                };
+                
+                const alertCard = document.createElement('div');
+                alertCard.className = 'alert-card';
+                alertCard.innerHTML = `
+                    <div class="alert-header">
+                        <h3>${typeLabels[report.type] || report.type}</h3>
+                        <span class="alert-type">${typeLabels[report.type] || report.type}</span>
+                    </div>
+                    <div class="alert-time">${formattedDate}</div>
+                    <div class="alert-location"><i class="fas fa-map-marker-alt"></i> ${report.location}</div>
+                    <div class="alert-description">${report.description}</div>
+                `;
+                
+                alertsContainer.appendChild(alertCard);
+            });
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const totalReports = reports.length;
+            document.getElementById('total-reports').textContent = totalReports;
+            
+            // Calculate reports in the last week
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            
+            const weekReports = reports.filter(report => {
+                const reportDate = new Date(report.dateTime);
+                return reportDate >= oneWeekAgo;
+            }).length;
+            
+            document.getElementById('week-reports').textContent = weekReports;
+            
+            // Calculate most common incident type
+            if (totalReports > 0) {
+                const typeCounts = {};
+                reports.forEach(report => {
+                    typeCounts[report.type] = (typeCounts[report.type] || 0) + 1;
+                });
+                
+                let commonType = '';
+                let maxCount = 0;
+                
+                for (const type in typeCounts) {
+                    if (typeCounts[type] > maxCount) {
+                        maxCount = typeCounts[type];
+                        commonType = type;
+                    }
+                }
+                
+                const typeLabels = {
+                    'theft': 'Theft',
+                    'burglary': 'Burglary',
+                    'assault': 'Assault',
+                    'vandalism': 'Vandalism',
+                    'suspicious': 'Suspicious',
+                    'other': 'Other'
+                };
+                
+                document.getElementById('common-type').textContent = typeLabels[commonType] || commonType;
+            }
+        }
+    </script>
+</body>
+</html>
